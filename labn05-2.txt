@@ -1,0 +1,52 @@
+#include <Keypad.h>
+byte ledPins[]={12,13,14,15,16,17,6};
+byte num[10]={
+  B0111111,//0   GFEDCBA
+  B0000110,//1
+  B1011011,//2
+  B1001111,//3
+  B1100110,//4
+  B1101101,//5
+  B1111101,//6
+  B0000111,//7
+  B1111111,//8
+  B1101111 //9 
+ };
+const byte ROWS = 4; 
+const byte COLS = 4; 
+
+char keys[ROWS][COLS] = {
+{'F', 'E', 'D', 'C'}, {'B','A','9','8'},
+{'7', '6', '5', '4'}, {'3', '2', '1', '0'}
+};
+
+byte rowPins[ROWS] = {2,3,4,5};
+
+byte colPins[COLS] = {8,9,10,11};
+
+Keypad keypad =
+Keypad( makeKeymap(keys), rowPins,
+colPins, ROWS, COLS );
+void setup(){
+Serial.begin(9600);
+ pinMode(7,OUTPUT);
+  int i;
+  for(i=0;i<8;i++)
+    pinMode(ledPins[i],OUTPUT);
+}
+
+
+void loop(){
+char  key=keypad.getKey();
+   if(key!=NO_KEY){
+      int Value=key-48,i;
+      Serial.println(key);
+      
+      for(i=0;i<7;i++){
+        if(bitRead(num[Value],i))
+          digitalWrite(ledPins[i],1);  
+        else
+          digitalWrite(ledPins[i],0);
+}
+   }
+}
